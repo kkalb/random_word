@@ -1,5 +1,20 @@
 defmodule RandomWord do
-  @default_dictpath "/workspaces/random_word/lib/data/wordlist.txt"
+  @moduledoc """
+  Solving unlike https://github.com/groovemonkey/go-elixir-benchmark/tree/master did.
+  On each element I do the `random` operation and save the result in a map for duplicate lookup as part of the algoritm.
+  The result is always unique and the workload is slower for bigger n.
+  Anyways, this is not the way it is done in the Go approach.
+  Check random_word_original.ex for more context.
+  ```
+  Name                     ips        average  deviation         median         99th %
+  5_words            454714.77        2.20 μs   ±384.67%           2 μs        3.36 μs
+  55_words            28917.33       34.58 μs    ±53.73%       32.41 μs       85.02 μs
+  555_words            3438.48      290.83 μs    ±19.17%      278.58 μs      440.64 μs
+  5555_words            277.31     3606.08 μs    ±12.80%     3434.62 μs     4846.96 μs
+  ```
+  Transformation of data to `Aja.Vector` is done outside the benchmark.
+  """
+  @default_dictpath "/workspaces/random_word/data/wordlist.txt"
 
   @spec new({map(), non_neg_integer()}, non_neg_integer(), map()) :: binary()
   def new({wordlist, size}, length, taken \\ %{}) do
