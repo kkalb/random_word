@@ -1,0 +1,22 @@
+{
+	"name": "Elixir",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash"
+			},
+			"extensions": [
+				"jakebecker.elixir-ls",
+				"ms-azuretools.vscode-docker",
+				"shd101wyy.markdown-preview-enhanced"
+			]
+		}
+	},
+	"appPort": [],
+	"postCreateCommand": "",
+	"remoteUser": "vscode"
+}
