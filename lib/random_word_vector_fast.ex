@@ -1,4 +1,4 @@
-defmodule RandomWord.RandomWordVector do
+defmodule RandomWord.RandomWordVectorFast do
   @moduledoc """
   Solving like https://github.com/groovemonkey/go-elixir-benchmark/tree/master did.
   ```
@@ -13,28 +13,31 @@ defmodule RandomWord.RandomWordVector do
   @spec new(Aja.Vector.t(), non_neg_integer()) :: binary()
   def new(wordlist, length) do
     wordlist
-    |> choose_words(length, [])
-    |> Enum.join("-")
+    |> choose_words(length, %{})
+    |> Map.keys()
+    |> Aja.Enum.join("-")
   end
 
-  @spec choose_words(Aja.Vector.t(), non_neg_integer(), list()) :: list()
+  @spec choose_words(Aja.Vector.t(), non_neg_integer(), map()) :: map()
   defp choose_words(_wordlist, 0, words), do: words
 
   defp choose_words(wordlist, num_words, words) do
     choose_words(wordlist, num_words, words, rand_from_array(wordlist))
   end
 
+  @spec choose_words(Aja.Vector.t(), non_neg_integer(), map(), binary()) :: map()
   defp choose_words(wordlist, num_words, words, rand_word) do
-    if Enum.member?(words, rand_word) do
+    if Map.has_key?(words, rand_word) do
       choose_words(wordlist, num_words, words)
     else
-      choose_words(wordlist, num_words - 1, [rand_word | words])
+      choose_words(wordlist, num_words - 1, Map.put(words, rand_word, true))
     end
   end
 
   @spec rand_from_array(Aja.Vector.t()) :: binary()
   def rand_from_array(arr) do
     idx = :rand.uniform(Arrays.size(arr))
+
     arr[idx - 1]
   end
 end

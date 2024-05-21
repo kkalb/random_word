@@ -1,4 +1,4 @@
-defmodule RandomWord do
+defmodule RandomWord.RandomWordMap do
   @moduledoc """
   Solving unlike https://github.com/groovemonkey/go-elixir-benchmark/tree/master did.
   On each element I do the `random` operation and save the result in a map for duplicate lookup as part of the algoritm.
@@ -14,8 +14,6 @@ defmodule RandomWord do
   ```
   Transformation of data to `Aja.Vector` is done outside the benchmark.
   """
-  @default_dictpath "/workspaces/random_word/data/wordlist.txt"
-
   @spec new({map(), non_neg_integer()}, non_neg_integer(), map()) :: binary()
   def new({wordlist, size}, length, taken \\ %{}) do
     wordlist |> choose_words(length, [], taken, size - 1) |> Enum.join("-")
@@ -41,22 +39,4 @@ defmodule RandomWord do
   end
 
   defp get_random_word(wordlist, size), do: Map.get(wordlist, :rand.uniform(size))
-
-  @spec wordlist_from_file(binary()) :: {map(), non_neg_integer()}
-  def wordlist_from_file(dictpath \\ @default_dictpath) do
-    dictpath
-    |> File.read!()
-    |> String.split("\n")
-    |> wordlist_to_map
-  end
-
-  @spec wordlist_to_map(list()) :: {map(), integer()}
-  def wordlist_to_map(wordlist) do
-    {wordlist, size} =
-      Enum.reduce(wordlist, {%{}, 1}, fn word, {words, size} ->
-        {Map.put(words, size, word), size + 1}
-      end)
-
-    {wordlist, size}
-  end
 end
